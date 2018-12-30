@@ -24,7 +24,7 @@
                         <script>
                             //global data
                             var gameActive = false;
-                            var delay = 400;
+                            var delay = 200;
 
                             var squaresInRow = 80;
                             var squaresInColumn = 80;
@@ -216,13 +216,13 @@
                     </div>
                     <div class="card-footer text-center">
                         <label>Delay: </label>
-                        <input id="delayInput" type="number" min="100" max="3000"/>
+                        <input id="delayInput" type="number" min="50" max="3000"/>
                         <script>
                             $('#delayInput').val(delay);
                             $('#delayInput').on('input',
                                 function() {
                                     delay = Number($(this).val());
-                                    if (delay < 100) delay = 100;
+                                    if (delay < 50) delay = 50;
                                     if (delay > 3000) delay = 3000;
 
                                     clearInterval(myInterval);
