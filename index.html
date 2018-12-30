@@ -54,19 +54,18 @@
                                 clicking = true;
                             });
 
-                            canvas.addEventListener('mouseup', function () {
+                            canvas.addEventListener('mouseup', function(event) {
                                 clicking = false;
+				                handleClick(event);
                             });
 
                             canvas.addEventListener('mousemove', function(event) {
                                 if(clicking === false) return;
-                                var pos = getMousePos(canvas, event);
+				                var pos = getMousePos(canvas, event);
 
                                 var i = Math.floor(pos.x / boxSize);
                                 var j = Math.floor(pos.y / boxSize);
-
-                                if (arr[i][j]) return;
-
+				                if(arr[i][j]) return;
                                 arr[i][j] = true;
                                 drawCell(i, j, arr[i][j]);
                             });
