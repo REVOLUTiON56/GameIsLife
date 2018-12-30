@@ -47,6 +47,30 @@
                             canvas.height = boxSize * squaresInColumn;
                             var ctx = canvas.getContext('2d');
                             canvas.addEventListener('click', handleClick);
+                            
+                            var clicking = false;
+
+                            canvas.addEventListener('mousedown', function () {
+                                clicking = true;
+                            });
+
+                            canvas.addEventListener('mouseup', function () {
+                                clicking = false;
+                            });
+
+                            canvas.addEventListener('mousemove', function(event) {
+                                if(clicking === false) return;
+                                var pos = getMousePos(canvas, event);
+
+                                var i = Math.floor(pos.x / boxSize);
+                                var j = Math.floor(pos.y / boxSize);
+
+                                if (arr[i][j]) return;
+
+                                arr[i][j] = true;
+                                drawCell(i, j, arr[i][j]);
+                            });
+                            
                             //functions
                             function getMousePos(c, evt) {
                                 var rect = c.getBoundingClientRect();
