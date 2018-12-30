@@ -1,1 +1,1 @@
- https://revolution56.github.io/GameIsLife
+ https://revolution56.github.io/GameOfLife
