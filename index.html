@@ -26,8 +26,8 @@
                             var gameActive = false;
                             var delay = 400;
 
-                            var squaresInRow = 100;
-                            var squaresInColumn = 100;
+                            var squaresInRow = 70;
+                            var squaresInColumn = 70;
                             var boxSize = 7;
 
                             //create array
@@ -47,7 +47,7 @@
                             canvas.height = boxSize * squaresInColumn;
                             var ctx = canvas.getContext('2d');
                             canvas.addEventListener('click', handleClick);
-                            
+
                             var clicking = false;
 
                             canvas.addEventListener('mousedown', function () {
@@ -70,7 +70,7 @@
                                 arr[i][j] = true;
                                 drawCell(i, j, arr[i][j]);
                             });
-                            
+
                             //functions
                             function getMousePos(c, evt) {
                                 var rect = c.getBoundingClientRect();
@@ -217,7 +217,6 @@
                     <div class="card-footer text-center">
                         <label>Delay: </label>
                         <input id="delayInput" type="number" min="100" max="3000"/>
-                        
                         <script>
                             $('#delayInput').val(delay);
                             $('#delayInput').on('input',
