@@ -220,11 +220,19 @@
                         
                         <script>
                             $('#delayInput').val(delay);
-                            $('#delayInput').on('input', function () {
-                                delay = Number($(this).val());
-                                if (delay < 100) delay = 100;
-                                if (delay > 3000) delay = 3000;
-                            });
+                            $('#delayInput').on('input',
+                                function() {
+                                    delay = Number($(this).val());
+                                    if (delay < 100) delay = 100;
+                                    if (delay > 3000) delay = 3000;
+
+                                    clearInterval(myInterval);
+                                    myInterval = setInterval(function () {
+                                        if (!gameActive) return;
+                                        step();
+                                        drawGrid();
+                                    }, delay);
+                                });
                         </script>
                         <button class="btn btn-warning" onclick="fillGrid()">Fill</button>
                         <button class="btn btn-primary" onclick="startGame()">Start</button>
