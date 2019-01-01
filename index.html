@@ -9,7 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-
+    <script src="GameOfLife.js"></script>
 </head>
 <body>
     <div class="container-fluid">
@@ -22,220 +22,24 @@
                     <div class="card-body text-center">
                         <canvas id="grid"></canvas>
                         <script>
-                            //global data
-                            var gameActive = false;
-                            var delay = 200;
-
-                            var squaresInRow = 80;
-                            var squaresInColumn = 80;
-                            var boxSize = 8;
-
-                            //create array
-                            var arr = new Array(squaresInRow);
-                            for (var i = 0; i < arr.length; i++) {
-                                arr[i] = new Array(squaresInColumn).fill(false);
-                            }
-
-                            var neighboursArr = new Array(squaresInRow);
-                            for (var i = 0; i < neighboursArr.length; i++) {
-                                neighboursArr[i] = new Array(squaresInColumn).fill(0);
-                            };
-
-                            //canvas parameters
                             var canvas = document.getElementById("grid");
-                            canvas.width = boxSize * squaresInRow;
-                            canvas.height = boxSize * squaresInColumn;
-                            var ctx = canvas.getContext('2d');
-                            //canvas.addEventListener('click', handleClick);
-
-                            var clicking = false;
-
-                            canvas.addEventListener('mousedown', function () {
-                                clicking = true;
-                            });
-
-                            canvas.addEventListener('mouseup', function(event) {
-                                clicking = false;
-				                handleClick(event);
-                            });
-
-                            canvas.addEventListener('mousemove', function(event) {
-                                if(clicking === false) return;
-				                var pos = getMousePos(canvas, event);
-
-                                var i = Math.floor(pos.x / boxSize);
-                                var j = Math.floor(pos.y / boxSize);
-				                if(arr[i][j]) return;
-                                arr[i][j] = true;
-                                drawCell(i, j, arr[i][j]);
-                            });
-
-                            //functions
-                            function getMousePos(c, evt) {
-                                var rect = c.getBoundingClientRect();
-                                return {
-                                    x: evt.clientX - rect.left,
-                                    y: evt.clientY - rect.top
-                                };
-                            }
-
-                            function handleClick(e) {
-                                var pos = getMousePos(canvas, e);
-
-                                var i = Math.floor(pos.x / boxSize);
-                                var j = Math.floor(pos.y / boxSize);
-
-                                arr[i][j] = !arr[i][j];
-                                drawCell(i, j, arr[i][j]);
-                            }
-
-                            function drawGrid() {
-                                for (var i = 0; i < arr.length; i++) {
-                                    for (var j = 0; j < arr[i].length; j++) {
-                                        drawCell(i, j, arr[i][j]);
-                                    }
-                                }
-                            }
-
-                            function drawCell(x, y, fillStyle) {
-                                ctx.lineWidth = 2;
-                                ctx.strokeStyle = 'lightblue';
-                                ctx.fillStyle = fillStyle ? "black" : "white";
-                                ctx.fillRect(x * boxSize, y * boxSize, boxSize, boxSize);
-                                ctx.strokeRect(x * boxSize, y * boxSize, boxSize, boxSize);
-                            }
-
-                            var myInterval;
-                            function startGame() {
-                                if (gameActive) return false;
-
-                                console.log("Game started");
-                                gameActive = true;
-                                myInterval = setInterval(function () {
-                                    if (!gameActive) return;
-                                    step();
-                                    drawGrid();
-                                }, delay);
-
-                                return false;
-                            }
-
-                            function step() {
-                                //calculate neigbours
-                                var i, j;
-                                for (i = 0; i < arr.length; i++) {
-                                    for (j = 0; j < arr[i].length; j++) {
-                                        neighboursArr[i][j] = neighboursCount(i, j);
-                                    }
-                                }
-
-                                //change states
-                                for (i = 0; i < arr.length; i++) {
-                                    for (j = 0; j < arr[i].length; j++) {
-                                        var state = arr[i][j];
-                                        if (state) {
-                                            //rule1
-                                            if (neighboursArr[i][j] < 2)
-                                                arr[i][j] = false;
-
-                                            //rule2
-                                            if (neighboursArr[i][j] === 2 || neighboursArr[i][j] === 3)
-                                                arr[i][j] = true;
-
-                                            //rule3
-                                            if (neighboursArr[i][j] > 3)
-                                                arr[i][j] = false;
-                                        }
-                                        else {
-                                            if (neighboursArr[i][j] === 3) 
-                                                arr[i][j] = true;
-                                        }
-                                    }
-                                }
-                            }
-
-                            function neighboursCount(i, j) {
-                                var count = 0;
-
-                                var start = {
-                                    x: (i > 0) ? i - 1 : 0,
-                                    y: (j > 0) ? j - 1 : 0
-                                }
-
-                                var end = {
-                                    x: (i < arr.length - 1) ? i + 1 : arr.length - 1,
-                                    y: (j < arr[i].length - 1) ? j + 1 : arr[i].length - 1
-                                }
-
-                                for (var m = start.x; m <= end.x; m++) {
-                                    for (var n = start.y; n <= end.y; n++) {
-                                        if(m === i && n === j) continue;
-                                        if (arr[m][n])
-                                            count++;
-
-                                        if(count >= 4) break;
-                                    }
-                                }
-
-                                return count;
-                            }
-
-                            function pauseGame() {
-                                if (!gameActive) return false;
-                                console.log("Game paused");
-                                gameActive = false;
-
-                                clearInterval(myInterval);
-                                return false;
-                            }
-
-                            function resetGame() {
-                                gameActive = false;
-                                for (var i = 0; i < arr.length; i++) {
-                                    arr[i] = new Array(squaresInColumn).fill(false);
-                                }
-                                drawGrid();
-                                clearInterval(myInterval);
-                                return false;
-                            }
-
-                            function fillGrid() {
-                                if (gameActive) return false;
-                                for (var i = 0; i < arr.length; i++) {
-                                    for (var j = 0; j < arr[i].length; j++) {
-                                        arr[i][j] = Math.random() >= 0.5;
-                                    };
-                                }
-                                drawGrid();
-                                return false;
-                            }
-
-                            drawGrid();
+                            var game = new Game(canvas, 100, 100, 10, 200);
                         </script>
                     </div>
                     <div class="card-footer text-center">
                         <label>Delay: </label>
                         <input id="delayInput" type="number" min="50" max="3000"/>
                         <script>
-                            $('#delayInput').val(delay);
+                            $('#delayInput').val(window.game.delay);
                             $('#delayInput').on('input',
                                 function() {
-                                    delay = Number($(this).val());
-                                    if (delay < 50) delay = 50;
-                                    if (delay > 3000) delay = 3000;
-
-                                    clearInterval(myInterval);
-                                    myInterval = setInterval(function () {
-                                        if (!gameActive) return;
-                                        step();
-                                        drawGrid();
-                                    }, delay);
+                                    window.game.delay = Number($(this).val());
                                 });
                         </script>
-                        <button class="btn btn-warning" onclick="fillGrid()">Fill</button>
-                        <button class="btn btn-primary" onclick="startGame()">Start</button>
-                        <button class="btn btn-secondary" onclick="pauseGame()">Pause</button>
-                        <button class="btn btn-danger" onclick="resetGame()">Reset</button>
+                        <button class="btn btn-warning" onclick="game.fillRandom()">Fill</button>
+                        <button class="btn btn-primary" onclick="game.start()">Start</button>
+                        <button class="btn btn-secondary" onclick="game.pause()">Pause</button>
+                        <button class="btn btn-danger" onclick="game.reset()">Reset</button>
                     </div>
                 </div>
             </div>
