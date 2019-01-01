@@ -32,14 +32,14 @@ class Game {
 
     set delay(newValue) {
         if (newValue < 50)
-            this._delay = 50;
+            newValue = 50;
         if (newValue > 3000)
-            this._delay = 3000;
+            newValue = 3000;
 
         this._delay = newValue;
         if (this.gameActive) {
             clearInterval(this.myInterval);
-            this.myInterval = setInterval(this.updateFunc, this.delay);
+            this.myInterval = setInterval(this.updateFunc, this._delay);
         }
     }
 
@@ -223,8 +223,12 @@ class Board {
                     this.ctx.lineWidth = 2;
                     this.ctx.strokeStyle = 'lightblue';
                     this.ctx.fillStyle = this.cells[i][j].state ? "black" : "white";
-                    this.ctx.fillRect(this.cells[i][j].x * this.ctx.cellSize, this.cells[i][j].y * this.ctx.cellSize, this.ctx.cellSize, this.ctx.cellSize);
-                    this.ctx.strokeRect(this.cells[i][j].x * this.ctx.cellSize, this.cells[i][j].y * this.ctx.cellSize, this.ctx.cellSize, this.ctx.cellSize);
+                    this.ctx.fillRect(this.cells[i][j].x * this.ctx.cellSize, this.cells[i][j].y * 
+
+this.ctx.cellSize, this.ctx.cellSize, this.ctx.cellSize);
+                    this.ctx.strokeRect(this.cells[i][j].x * this.ctx.cellSize, this.cells[i][j].y * 
+
+this.ctx.cellSize, this.ctx.cellSize, this.ctx.cellSize);
                 }
             }
         }
@@ -232,8 +236,12 @@ class Board {
             this.ctx.lineWidth = 2;
             this.ctx.strokeStyle = 'lightblue';
             this.ctx.fillStyle = cell.state ? "black" : "white";
-            this.ctx.fillRect(cell.x * this.ctx.cellSize, cell.y * this.ctx.cellSize, this.ctx.cellSize, this.ctx.cellSize);
-            this.ctx.strokeRect(cell.x * this.ctx.cellSize, cell.y * this.ctx.cellSize, this.ctx.cellSize, this.ctx.cellSize);
+            this.ctx.fillRect(cell.x * this.ctx.cellSize, cell.y * this.ctx.cellSize, this.ctx.cellSize, 
+
+this.ctx.cellSize);
+            this.ctx.strokeRect(cell.x * this.ctx.cellSize, cell.y * this.ctx.cellSize, this.ctx.cellSize, 
+
+this.ctx.cellSize);
         }
     }
 
