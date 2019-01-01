@@ -125,6 +125,7 @@ class Game {
         this.gameActive = false;
         clearInterval(this.myInterval);
 
+        this.clear();
         this.board.clear();
         return false;
     }
@@ -136,8 +137,17 @@ class Game {
                 this.cells[i][j].state = Math.random() >= 0.5;
             }
         }
+
         this.board.print();
         return false;
+    }
+
+    clear() {
+        for (var i = 0; i < this.cells.length; i++) {
+            for (var j = 0; j < this.cells[i].length; j++) {
+                this.cells[i][j].state = false;
+            }
+        }
     }
 }
 
