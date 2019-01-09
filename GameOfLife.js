@@ -215,20 +215,17 @@ class Board {
     }
 
     print(cell) {
+
         if (typeof cell === "undefined") {
             this.clear();
 
+            this.ctx.lineWidth = 2;
+            this.ctx.strokeStyle = 'lightblue'; 
             for (var i = 0; i < this.cells.length; i++) {
                 for (var j = 0; j < this.cells[i].length; j++) {
-                    this.ctx.lineWidth = 2;
-                    this.ctx.strokeStyle = 'lightblue';
                     this.ctx.fillStyle = this.cells[i][j].state ? "black" : "white";
-                    this.ctx.fillRect(this.cells[i][j].x * this.ctx.cellSize, this.cells[i][j].y * 
-
-this.ctx.cellSize, this.ctx.cellSize, this.ctx.cellSize);
-                    this.ctx.strokeRect(this.cells[i][j].x * this.ctx.cellSize, this.cells[i][j].y * 
-
-this.ctx.cellSize, this.ctx.cellSize, this.ctx.cellSize);
+                    this.ctx.fillRect(this.cells[i][j].x * this.ctx.cellSize, this.cells[i][j].y * this.ctx.cellSize, this.ctx.cellSize, this.ctx.cellSize); 
+                    this.ctx.strokeRect(this.cells[i][j].x * this.ctx.cellSize, this.cells[i][j].y * this.ctx.cellSize, this.ctx.cellSize, this.ctx.cellSize); 
                 }
             }
         }
@@ -236,12 +233,8 @@ this.ctx.cellSize, this.ctx.cellSize, this.ctx.cellSize);
             this.ctx.lineWidth = 2;
             this.ctx.strokeStyle = 'lightblue';
             this.ctx.fillStyle = cell.state ? "black" : "white";
-            this.ctx.fillRect(cell.x * this.ctx.cellSize, cell.y * this.ctx.cellSize, this.ctx.cellSize, 
-
-this.ctx.cellSize);
-            this.ctx.strokeRect(cell.x * this.ctx.cellSize, cell.y * this.ctx.cellSize, this.ctx.cellSize, 
-
-this.ctx.cellSize);
+            this.ctx.fillRect(cell.x * this.ctx.cellSize, cell.y * this.ctx.cellSize, this.ctx.cellSize, this.ctx.cellSize);
+            this.ctx.strokeRect(cell.x * this.ctx.cellSize, cell.y * this.ctx.cellSize, this.ctx.cellSize, this.ctx.cellSize);
         }
     }
 
@@ -251,19 +244,16 @@ this.ctx.cellSize);
         this.ctx.lineWidth = 2;
         this.ctx.strokeStyle = 'lightblue';
         var i = 0;
+        this.ctx.beginPath();
         for (i = 0; i <= this.width; i++) {
-            this.ctx.beginPath();
             this.ctx.moveTo(i * this.ctx.cellSize, 0);
             this.ctx.lineTo(i * this.ctx.cellSize, this.canvas.height);
-            this.ctx.stroke();
         }
-
         for (i = 0; i <= this.height; i++) {
-            this.ctx.beginPath();
             this.ctx.moveTo(0, i * this.ctx.cellSize);
             this.ctx.lineTo(this.canvas.width, i * this.ctx.cellSize);
-            this.ctx.stroke();
         }
+        this.ctx.stroke();
     }
 }
 
